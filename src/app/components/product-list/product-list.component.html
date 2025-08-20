@@ -1,0 +1,53 @@
+<div class="container mt-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Product Management</h2>
+    <button class="btn btn-primary" (click)="addProduct()">
+      <i class="fas fa-plus"></i> Add Product
+    </button>
+  </div>
+
+  <div *ngIf="errorMessage" class="alert alert-danger">
+    {{ errorMessage }}
+  </div>
+
+  <div *ngIf="isLoading" class="text-center">
+    <div class="spinner-border" role="status">
+      <span class="sr-only">Loading...</span>
+    </div>
+  </div>
+
+  <div *ngIf="!isLoading && products.length === 0" class="alert alert-info">
+    No products found.
+  </div>
+
+  <div class="row" *ngIf="!isLoading && products.length > 0">
+    <div class="col-md-6 col-lg-4 mb-4" *ngFor="let product of products">
+      <div class="card h-100">
+        <img
+          [src]="product.imageUrl.images[0] || 'https://via.placeholder.com/300'"
+          class="card-img-top"
+          [alt]="product.title"
+          style="height: 200px; object-fit: cover;"
+        >
+        <div class="card-body">
+          <h5 class="card-title">{{ product.title }}</h5>
+          <p class="card-text">{{ product.description | slice:0:100 }}...</p>
+          <p class="card-text"><strong>Price:</strong> ${{ product.price }}</p>
+          <p class="card-text">
+            <strong>Colors:</strong>
+            <span class="color-dot" [style.backgroundColor]="product.firstColor"></span>
+            <span class="color-dot" [style.backgroundColor]="product.secondColor"></span>
+          </p>
+        </div>
+        <div class="card-footer">
+          <button class="btn btn-sm btn-outline-primary me-2" (click)="editProduct(product._id!)">
+            <i class="fas fa-edit"></i> Edit
+          </button>
+          <button class="btn btn-sm btn-outline-danger" (click)="deleteProduct(product._id!)">
+            <i class="fas fa-trash"></i> Delete
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

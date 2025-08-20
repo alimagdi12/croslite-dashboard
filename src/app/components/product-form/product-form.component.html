@@ -1,0 +1,133 @@
+<div class="container mt-4">
+  <h2>{{ isEditMode ? 'Edit' : 'Add' }} Product</h2>
+
+  <div *ngIf="errorMessage" class="alert alert-danger">
+    {{ errorMessage }}
+  </div>
+
+  <form [formGroup]="productForm" (ngSubmit)="onSubmit()">
+    <div class="row">
+      <div class="col-md-6">
+        <div class="form-group">
+          <label>Title *</label>
+          <input type="text" class="form-control" formControlName="title">
+          <div *ngIf="productForm.get('title')?.invalid && productForm.get('title')?.touched" class="text-danger">
+            Title is required and must be at least 3 characters long.
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Arabic Title *</label>
+          <input type="text" class="form-control" formControlName="arabicTitle">
+          <div *ngIf="productForm.get('arabicTitle')?.invalid && productForm.get('arabicTitle')?.touched" class="text-danger">
+            Arabic title is required and must be at least 3 characters long.
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Price *</label>
+          <input type="number" class="form-control" formControlName="price" step="0.01">
+          <div *ngIf="productForm.get('price')?.invalid && productForm.get('price')?.touched" class="text-danger">
+            Valid price is required.
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Description *</label>
+          <textarea class="form-control" formControlName="description" rows="3"></textarea>
+          <div *ngIf="productForm.get('description')?.invalid && productForm.get('description')?.touched" class="text-danger">
+            Description is required and must be between 5-400 characters.
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Details *</label>
+          <textarea class="form-control" formControlName="details" rows="3"></textarea>
+          <div *ngIf="productForm.get('details')?.invalid && productForm.get('details')?.touched" class="text-danger">
+            Details are required and must be at least 5 characters long.
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <div class="row">
+          <div class="col-sm-6">
+            <div class="form-group">
+              <label>Size From *</label>
+              <input type="number" class="form-control" formControlName="sizeFrom">
+              <div *ngIf="productForm.get('sizeFrom')?.invalid && productForm.get('sizeFrom')?.touched" class="text-danger">
+                Size from is required.
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <div class="form-group">
+              <label>Size To *</label>
+              <input type="number" class="form-control" formControlName="sizeTo">
+              <div *ngIf="productForm.get('sizeTo')?.invalid && productForm.get('sizeTo')?.touched" class="text-danger">
+                Size to is required.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Size (comma separated)</label>
+          <input type="text" class="form-control" formControlName="size" placeholder="38,39,40,41">
+        </div>
+
+        <div class="form-group">
+          <label>Size in Letters</label>
+          <input type="text" class="form-control" formControlName="sizeInLetters">
+        </div>
+
+        <div class="form-group">
+          <label>Size in CM</label>
+          <input type="number" class="form-control" formControlName="sizeInCm">
+        </div>
+
+        <div class="form-group">
+          <label>First Color *</label>
+          <input type="text" class="form-control" formControlName="firstColor">
+          <div *ngIf="productForm.get('firstColor')?.invalid && productForm.get('firstColor')?.touched" class="text-danger">
+            First color is required.
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Second Color *</label>
+          <input type="text" class="form-control" formControlName="secondColor">
+          <div *ngIf="productForm.get('secondColor')?.invalid && productForm.get('secondColor')?.touched" class="text-danger">
+            Second color is required.
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Rating</label>
+          <input type="number" class="form-control" formControlName="rating" min="0" max="5" step="0.1">
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group mt-3">
+      <label>Product Images</label>
+      <input type="file" class="form-control" multiple (change)="onFileSelected($event)" accept="image/*">
+
+      <div class="image-previews mt-3">
+        <div class="image-preview" *ngFor="let preview of imagePreviews; let i = index">
+          <img [src]="preview" alt="Preview">
+          <button type="button" class="btn btn-sm btn-danger remove-btn" (click)="removeImage(i)">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-4">
+      <button type="submit" class="btn btn-primary me-2" [disabled]="isLoading || productForm.invalid">
+        {{ isLoading ? 'Saving...' : (isEditMode ? 'Update' : 'Create') }} Product
+      </button>
+      <button type="button" class="btn btn-secondary" [routerLink]="['/dashboard']">Cancel</button>
+    </div>
+  </form>
+</div>
