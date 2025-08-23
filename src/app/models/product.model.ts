@@ -1,5 +1,5 @@
 export interface Product {
-  _id?: string;
+  _id: string;
   title: string;
   arabicTitle: string;
   price: number;
@@ -10,15 +10,18 @@ export interface Product {
   };
   sizeFrom: number;
   sizeTo: number;
-  size: {
+  size?: {
     range: string[];
   };
   sizeInLetters?: string;
   sizeInCm?: number;
   firstColor: string;
   secondColor: string;
-  rating?: number;
-  userId?: string;
-  createdAt?: string;
-  updatedAt?: string;
+  rating: number;
+  userId: string;
+  clicks: number;
+  isVisible: boolean;
+  isAvailable: boolean;
+  createdAt: string;
+  updatedAt: string;
 }

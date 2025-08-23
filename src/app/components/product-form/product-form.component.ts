@@ -38,7 +38,9 @@ export class ProductFormComponent implements OnInit {
       size: [''],
       firstColor: ['', Validators.required],
       secondColor: ['', Validators.required],
-      rating: [0, [Validators.min(0), Validators.max(5)]]
+      rating: [0, [Validators.min(0), Validators.max(5)]],
+      isVisible: [true], // Default to visible
+      isAvailable: [true] // Default to available
     });
   }
 

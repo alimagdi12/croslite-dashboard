@@ -123,6 +123,22 @@
       </div>
     </div>
 
+    <!-- Add these fields to your existing form -->
+    <div class="row mt-3">
+      <div class="col-md-6">
+        <div class="form-check form-switch">
+          <input class="form-check-input" type="checkbox" formControlName="isVisible" id="isVisible">
+          <label class="form-check-label" for="isVisible">Visible to Customers</label>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="form-check form-switch">
+          <input class="form-check-input" type="checkbox" formControlName="isAvailable" id="isAvailable">
+          <label class="form-check-label" for="isAvailable">Available for Purchase</label>
+        </div>
+      </div>
+    </div>
+
     <div class="mt-4">
       <button type="submit" class="btn btn-primary me-2" [disabled]="isLoading || productForm.invalid">
         {{ isLoading ? 'Saving...' : (isEditMode ? 'Update' : 'Create') }} Product
