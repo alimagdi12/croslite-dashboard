@@ -5,6 +5,21 @@
     {{ errorMessage }}
   </div>
 
+  <!-- Toggle Buttons (only in edit mode) -->
+  <div *ngIf="isEditMode && product" class="mb-3">
+    <button type="button"
+            class="btn btn-outline-info me-2"
+            (click)="toggleVisibility()">
+      {{ product.isVisible ? 'Hide Product' : 'Show Product' }}
+    </button>
+
+    <button type="button"
+            class="btn btn-outline-warning"
+            (click)="toggleAvailability()">
+      {{ product.isAvailable ? 'Mark as Unavailable' : 'Mark as Available' }}
+    </button>
+  </div>
+
   <form [formGroup]="productForm" (ngSubmit)="onSubmit()">
     <div class="row">
       <div class="col-md-6">
@@ -119,22 +134,6 @@
           <button type="button" class="btn btn-sm btn-danger remove-btn" (click)="removeImage(i)">
             <i class="fas fa-times"></i>
           </button>
-        </div>
-      </div>
-    </div>
-
-    <!-- Add these fields to your existing form -->
-    <div class="row mt-3">
-      <div class="col-md-6">
-        <div class="form-check form-switch">
-          <input class="form-check-input" type="checkbox" formControlName="isVisible" id="isVisible">
-          <label class="form-check-label" for="isVisible">Visible to Customers</label>
-        </div>
-      </div>
-      <div class="col-md-6">
-        <div class="form-check form-switch">
-          <input class="form-check-input" type="checkbox" formControlName="isAvailable" id="isAvailable">
-          <label class="form-check-label" for="isAvailable">Available for Purchase</label>
         </div>
       </div>
     </div>

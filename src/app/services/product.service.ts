@@ -32,18 +32,18 @@ export class ProductService {
     return this.http.delete<{ success: boolean, message: string }>(`${this.apiUrl}/products/${id}`);
   }
 
-  // New methods for toggling visibility and availability
-  toggleVisibility(productId: string): Observable<{ success: boolean, message: string, product: { id: string, title: string, isVisible: boolean } }> {
-    return this.http.patch<{ success: boolean, message: string, product: { id: string, title: string, isVisible: boolean } }>(
+  toggleVisibility(productId: string) {
+    return this.http.patch<{ success: boolean, message: string, product: Product }>(
       `${this.apiUrl}/products/${productId}/visibility`,
       {}
     );
   }
 
-  toggleAvailability(productId: string): Observable<{ success: boolean, message: string, product: { id: string, title: string, isAvailable: boolean } }> {
-    return this.http.patch<{ success: boolean, message: string, product: { id: string, title: string, isAvailable: boolean } }>(
+  toggleAvailability(productId: string) {
+    return this.http.patch<{ success: boolean, message: string, product: Product }>(
       `${this.apiUrl}/products/${productId}/availability`,
       {}
     );
   }
+
 }

@@ -8,7 +8,7 @@ import { Product } from '../../models/product.model';
   selector: 'app-product-form',
   templateUrl: './product-form.component.html',
   styleUrls: ['./product-form.component.scss'],
-  standalone:false
+  standalone: false
 })
 export class ProductFormComponent implements OnInit {
   productForm: FormGroup;
@@ -18,6 +18,9 @@ export class ProductFormComponent implements OnInit {
   errorMessage = '';
   selectedFiles: File[] = [];
   imagePreviews: string[] = [];
+
+  // hold product info for toggling
+  product: Product | null = null;
 
   constructor(
     private fb: FormBuilder,
@@ -38,9 +41,7 @@ export class ProductFormComponent implements OnInit {
       size: [''],
       firstColor: ['', Validators.required],
       secondColor: ['', Validators.required],
-      rating: [0, [Validators.min(0), Validators.max(5)]],
-      isVisible: [true], // Default to visible
-      isAvailable: [true] // Default to available
+      rating: [0, [Validators.min(0), Validators.max(5)]]
     });
   }
 
@@ -58,12 +59,12 @@ export class ProductFormComponent implements OnInit {
     this.productService.getProduct(id).subscribe({
       next: (response) => {
         this.isLoading = false;
-        const product = response.data.product;
+        this.product = response.data.product;
         this.productForm.patchValue({
-          ...product,
-          size: product.size?.range?.join(',') || ''
+          ...this.product,
+          size: this.product.size?.range?.join(',') || ''
         });
-        this.imagePreviews = product.imageUrl.images;
+        this.imagePreviews = this.product.imageUrl.images;
       },
       error: (error) => {
         this.isLoading = false;
@@ -76,8 +77,6 @@ export class ProductFormComponent implements OnInit {
     const files: FileList = event.target.files;
     if (files && files.length > 0) {
       this.selectedFiles = Array.from(files);
-
-      // Create previews
       this.imagePreviews = [];
       for (let i = 0; i < files.length; i++) {
         const reader = new FileReader();
@@ -102,19 +101,16 @@ export class ProductFormComponent implements OnInit {
       const formData = new FormData();
       const formValue = this.productForm.value;
 
-      // Append all form fields
       Object.keys(formValue).forEach(key => {
         if (key !== 'size' && formValue[key] !== null && formValue[key] !== undefined) {
           formData.append(key, formValue[key]);
         }
       });
 
-      // Handle size field
       if (formValue.size) {
         formData.append('size', formValue.size);
       }
 
-      // Append images
       this.selectedFiles.forEach(file => {
         formData.append('images', file);
       });
@@ -143,5 +139,35 @@ export class ProductFormComponent implements OnInit {
         });
       }
     }
+  }
+
+  // NEW: toggle visibility
+  toggleVisibility(): void {
+    if (!this.productId) return;
+    this.productService.toggleVisibility(this.productId).subscribe({
+      next: (res) => {
+        if (this.product) {
+          this.product.isVisible = res.product.isVisible;
+        }
+      },
+      error: (err) => {
+        alert(err.error?.message || 'Failed to toggle visibility');
+      }
+    });
+  }
+
+  // NEW: toggle availability
+  toggleAvailability(): void {
+    if (!this.productId) return;
+    this.productService.toggleAvailability(this.productId).subscribe({
+      next: (res) => {
+        if (this.product) {
+          this.product.isAvailable = res.product.isAvailable;
+        }
+      },
+      error: (err) => {
+        alert(err.error?.message || 'Failed to toggle availability');
+      }
+    });
   }
 }
