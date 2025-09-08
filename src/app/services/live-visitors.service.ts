@@ -26,7 +26,7 @@ export interface LiveVisitorsData {
 export class LiveVisitorsService {
   private socket: any = null; // Use any type to avoid import issues
   private isConnected = false;
-  private apiUrl = 'http://api.croslite.com.eg:3001/api/analytics';
+  private apiUrl = 'https://api.croslite.com.eg:3001/api/analytics';
 
   // BehaviorSubjects for reactive updates
   private liveVisitorsSubject = new BehaviorSubject<LiveVisitorsData>({ count: 0, visitors: [] });
