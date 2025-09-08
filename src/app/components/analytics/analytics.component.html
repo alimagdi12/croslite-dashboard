@@ -1,0 +1,167 @@
+<div class="dashboard-container">
+  <!-- Loading State -->
+  <div *ngIf="isLoading" class="text-center py-5">
+    <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
+    </div>
+    <p class="mt-3">Loading dashboard data...</p>
+  </div>
+
+  <!-- Error State -->
+  <div *ngIf="errorMessage && !isLoading" class="alert alert-danger">
+    {{ errorMessage }}
+    <button class="btn btn-sm btn-outline-danger ms-3" (click)="loadDashboardData()">Retry</button>
+  </div>
+
+  <!-- Dashboard Content -->
+  <div *ngIf="!isLoading && !errorMessage && summary && statistics">
+    <!-- Summary Cards -->
+    <div class="row mb-4">
+      <div class="col-md-3 mb-3">
+        <div class="card bg-primary text-white text-center h-100">
+          <div class="card-body">
+            <h5 class="card-title">Total Visits</h5>
+            <h2 class="display-4">{{ summary.totalVisits | number }}</h2>
+            <p class="card-text">Worldwide</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3 mb-3">
+        <div class="card bg-success text-white text-center h-100">
+          <div class="card-body">
+            <h5 class="card-title">Egypt Visits</h5>
+            <h2 class="display-4">{{ summary.totalEgyptVisits | number }}</h2>
+            <p class="card-text">Domestic</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3 mb-3">
+        <div class="card bg-info text-white text-center h-100">
+          <div class="card-body">
+            <h5 class="card-title">Countries</h5>
+            <h2 class="display-4">{{ summary.totalCountries | number }}</h2>
+            <p class="card-text">Tracked</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3 mb-3">
+        <div class="card bg-warning text-dark text-center h-100">
+          <div class="card-body">
+            <h5 class="card-title">Governorates</h5>
+            <h2 class="display-4">{{ summary.totalGovernorates | number }}</h2>
+            <p class="card-text">Tracked</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Charts Row -->
+    <div class="row mb-4">
+      <!-- Top Countries Chart -->
+      <div class="col-lg-6 mb-4">
+        <div class="card h-100">
+          <div class="card-header">
+            <h5 class="card-title mb-0">Top 10 Countries by Visits</h5>
+          </div>
+          <div class="card-body">
+            <div style="height: 300px;">
+              <canvas #countryChart></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Top Governorates Chart -->
+      <div class="col-lg-6 mb-4">
+        <div class="card h-100">
+          <div class="card-header">
+            <h5 class="card-title mb-0">Top 10 Egyptian Governorates</h5>
+          </div>
+          <div class="card-body">
+            <div style="height: 300px;">
+              <canvas #governorateChart></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Product Clicks Chart -->
+    <div class="row mb-4">
+      <div class="col-12">
+        <div class="card">
+          <div class="card-header">
+            <h5 class="card-title mb-0">Top 10 Most Clicked Products</h5>
+          </div>
+          <div class="card-body">
+            <div style="height: 400px;">
+              <canvas #productChart></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Detailed Tables -->
+    <div class="row">
+      <!-- Countries Table -->
+      <div class="col-lg-6 mb-4">
+        <div class="card h-100">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <h5 class="card-title mb-0">All Countries</h5>
+            <span class="badge bg-primary">{{ statistics.countries.length }}</span>
+          </div>
+          <div class="card-body">
+            <div class="table-responsive" style="max-height: 400px;">
+              <table class="table table-hover">
+                <thead>
+                  <tr>
+                    <th>Country</th>
+                    <th>Visits</th>
+                    <th>Last Visit</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let country of statistics.countries">
+                    <td>{{ country.country }}</td>
+                    <td>{{ country.visits | number }}</td>
+                    <td>{{ country.lastVisit | date:'medium' }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Governorates Table -->
+      <div class="col-lg-6 mb-4">
+        <div class="card h-100">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <h5 class="card-title mb-0">Egyptian Governorates</h5>
+            <span class="badge bg-success">{{ statistics.governorates.length }}</span>
+          </div>
+          <div class="card-body">
+            <div class="table-responsive" style="max-height: 400px;">
+              <table class="table table-hover">
+                <thead>
+                  <tr>
+                    <th>Governorate</th>
+                    <th>Visits</th>
+                    <th>Last Visit</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let gov of statistics.governorates">
+                    <td>{{ gov.governorate }}</td>
+                    <td>{{ gov.visits | number }}</td>
+                    <td>{{ gov.lastVisit | date:'medium' }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

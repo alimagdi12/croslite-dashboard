@@ -12,6 +12,8 @@ import { NavbarComponent } from './components/navbar/navbar/navbar.component';
 
 import { ApiInterceptor } from './services/api.interceptor';
 import { AuthGuard } from './guards/auth-guard.guard';
+import { AnalyticsComponent } from './components/analytics/analytics.component';
+import { LiveVisitorsComponent } from './components/live-visitors/live-visitors.component';
 
 @NgModule({
   declarations: [
@@ -19,7 +21,9 @@ import { AuthGuard } from './guards/auth-guard.guard';
     LoginComponent,
     ProductListComponent,
     ProductFormComponent,
-    NavbarComponent
+    NavbarComponent,
+    AnalyticsComponent,
+    LiveVisitorsComponent
   ],
   imports: [
     BrowserModule,

@@ -1,0 +1,51 @@
+.live-visitors-card {
+  .connection-status {
+    font-size: 0.75rem;
+  }
+
+  .live-counter {
+    .display-4 {
+      font-weight: 300;
+      font-size: 3rem;
+    }
+  }
+
+  .visitors-list {
+    font-size: 0.85rem;
+
+    table {
+      th {
+        font-weight: 600;
+        font-size: 0.8rem;
+      }
+
+      td {
+        vertical-align: middle;
+      }
+    }
+  }
+
+  .card-footer {
+    border-top: 1px solid #eee;
+    padding: 0.75rem 1.25rem;
+
+    .col {
+      border-right: 1px solid #eee;
+
+      &:last-child {
+        border-right: none;
+      }
+    }
+  }
+}
+
+// Animation for live updates
+.live-update {
+  animation: pulse 0.5s ease-in-out;
+}
+
+@keyframes pulse {
+  0% { background-color: transparent; }
+  50% { background-color: rgba(72, 187, 120, 0.1); }
+  100% { background-color: transparent; }
+}

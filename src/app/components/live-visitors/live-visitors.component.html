@@ -1,0 +1,140 @@
+<div class="live-visitors-card card h-100">
+  <!-- Card Header -->
+  <div class="card-header d-flex justify-content-between align-items-center">
+    <h5 class="card-title mb-0">
+      <i class="fas fa-users me-2"></i>
+      Live Visitors
+      <span class="badge bg-primary ms-2">{{ liveVisitorsData.count }}</span>
+    </h5>
+
+    <div class="d-flex align-items-center gap-2">
+      <!-- Connection Status -->
+      <span class="connection-status badge" [ngClass]="{
+        'bg-success': isConnected,
+        'bg-danger': !isConnected
+      }">
+        {{ isConnected ? '● Live' : '● Offline' }}
+      </span>
+
+      <!-- Refresh Button -->
+      <button class="btn btn-sm btn-outline-secondary" (click)="refreshData()"
+              [disabled]="isLoading" title="Refresh data">
+        <i class="fas fa-sync" [class.fa-spin]="isLoading"></i>
+      </button>
+
+      <!-- Reconnect Button -->
+      <button *ngIf="!isConnected" class="btn btn-sm btn-outline-primary"
+              (click)="reconnectSocket()" title="Reconnect">
+        <i class="fas fa-plug"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- Card Body -->
+  <div class="card-body">
+    <!-- Loading State -->
+    <div *ngIf="isLoading" class="text-center py-4">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+      <p class="mt-2 text-muted">Loading live visitors...</p>
+    </div>
+
+    <!-- Error State (Socket disconnected) -->
+    <div *ngIf="!isLoading && !isConnected" class="alert alert-warning">
+      <i class="fas fa-exclamation-triangle me-2"></i>
+      Connection lost. Data may not be real-time.
+      <button class="btn btn-sm btn-outline-warning ms-2" (click)="reconnectSocket()">
+        Reconnect
+      </button>
+    </div>
+
+    <!-- Live Counter -->
+    <div *ngIf="!isLoading" class="live-counter text-center mb-4">
+      <div class="display-4 text-primary fw-bold">{{ liveVisitorsData.count }}</div>
+      <p class="text-muted mb-0">Active Visitors Right Now</p>
+      <small class="text-muted">Updated: {{ now | date:'mediumTime' }}</small>
+    </div>
+
+    <!-- Visitors List -->
+    <div *ngIf="!isLoading && liveVisitorsData.visitors.length > 0" class="visitors-list">
+      <h6 class="mb-3 border-bottom pb-2">
+        <i class="fas fa-list me-2"></i>
+        Active Sessions ({{ liveVisitorsData.visitors.length }})
+      </h6>
+
+      <div class="table-responsive" style="max-height: 300px;">
+        <table class="table table-sm table-hover">
+          <thead class="table-light">
+            <tr>
+              <th>Page</th>
+              <th>Duration</th>
+              <th>Last Activity</th>
+              <th>Device</th>
+              <th>Source</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let visitor of liveVisitorsData.visitors">
+              <td>
+                <div class="d-flex flex-column">
+                  <span class="fw-semibold">{{ getPageName(visitor.page) }}</span>
+                  <small class="text-muted text-truncate" style="max-width: 150px;">
+                    {{ visitor.page }}
+                  </small>
+                </div>
+              </td>
+              <td>
+                <span class="badge bg-info text-dark">
+                  {{ getVisitorDuration(visitor.connectedAt) }}
+                </span>
+              </td>
+              <td>
+                <small class="text-muted">{{ getTimeSinceLastActivity(visitor.lastActivity) }}</small>
+              </td>
+              <td>
+                <small>{{ getDeviceType(visitor.userAgent) }}</small>
+              </td>
+              <td>
+                <small class="text-muted">
+                  {{ truncateText(visitor.referrer || 'Direct', 20) }}
+                </small>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Empty State -->
+    <div *ngIf="!isLoading && liveVisitorsData.visitors.length === 0" class="text-center text-muted py-5">
+      <i class="fas fa-users-slash fa-3x mb-3"></i>
+      <h6>No active visitors</h6>
+      <p class="small">Visitors will appear here when they browse your site</p>
+    </div>
+  </div>
+
+  <!-- Card Footer -->
+  <div *ngIf="!isLoading" class="card-footer bg-transparent">
+    <div class="row text-center">
+      <div class="col">
+        <small class="text-muted">
+          <i class="fas fa-desktop me-1"></i>
+          {{ getDeviceCount('desktop') }} Desktop
+        </small>
+      </div>
+      <div class="col">
+        <small class="text-muted">
+          <i class="fas fa-mobile-alt me-1"></i>
+          {{ getDeviceCount('mobile') }} Mobile
+        </small>
+      </div>
+      <div class="col">
+        <small class="text-muted">
+          <i class="fas fa-tablet-alt me-1"></i>
+          {{ getDeviceCount('tablet') }} Tablet
+        </small>
+      </div>
+    </div>
+  </div>
+</div>
