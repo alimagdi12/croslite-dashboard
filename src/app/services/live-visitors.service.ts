@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-
-declare var io: any;
+import { io, Socket } from 'socket.io-client';
 
 export interface LiveVisitor {
   socketId: string;
@@ -13,6 +12,7 @@ export interface LiveVisitor {
   language: string;
   connectedAt: Date;
   lastActivity: Date;
+  ip?: string;
 }
 
 export interface LiveVisitorsData {
@@ -24,7 +24,7 @@ export interface LiveVisitorsData {
   providedIn: 'root'
 })
 export class LiveVisitorsService {
-  private socket: any = null; // Use any type to avoid import issues
+  private socket: Socket | null = null;
   private isConnected = false;
   private apiUrl = 'https://api.croslite.com.eg:3001/api/analytics';
 
@@ -42,9 +42,12 @@ export class LiveVisitorsService {
 
   private initializeSocket() {
     try {
-      // Use io directly from the imported module
-      this.socket = io.io('https://api.croslite.com.eg:3001', {
-        transports: ['websocket', 'polling']
+      // Use the correct port for your environment
+      const socketUrl = 'https://api.croslite.com.eg:3002';
+
+      this.socket = io(socketUrl, {
+        transports: ['websocket', 'polling'],
+        withCredentials: true
       });
 
       // Connection events
@@ -115,8 +118,10 @@ export class LiveVisitorsService {
   }
 
   reconnect() {
-    if (this.socket && !this.isConnected) {
+    if (this.socket) {
       this.socket.connect();
+    } else {
+      this.initializeSocket();
     }
   }
 }
